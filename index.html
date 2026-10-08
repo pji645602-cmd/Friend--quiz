@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FriendQuiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">FriendQuiz</div>
+
+    <div class="card hero">
+      <h1>How well do your friends know you? 👀</h1>
+
+      <p>
+        Create your own quiz and send it to your friends.
+      </p>
+
+      <a href="create.html" class="btn">
+        Create My Quiz
+      </a>
+    </div>
+
+    <div class="card">
+      <h2>Enter Quiz Code</h2>
+
+      <input
+        type="text"
+        id="quizCode"
+        placeholder="Enter quiz code"
+        maxlength="20"
+      >
+
+      <button class="btn" onclick="openQuiz()">
+        Take Quiz
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    function openQuiz() {
+      const code = document.getElementById("quizCode").value.trim();
+
+      if (!code) {
+        alert("Please enter a quiz code.");
+        return;
+      }
+
+      window.location.href =
+        "quiz.html?code=" + encodeURIComponent(code);
+    }
+  </script>
+
+</body>
+</html>
