@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Quiz - FriendQuiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">FriendQuiz</div>
+
+    <div class="card">
+
+      <h1>Create Your Quiz 🎯</h1>
+
+      <input
+        type="text"
+        id="creatorName"
+        placeholder="Your name"
+        maxlength="40"
+      >
+
+      <input
+        type="text"
+        id="quizTitle"
+        placeholder="Quiz title"
+        maxlength="100"
+      >
+
+      <div id="questionsContainer"></div>
+
+      <button class="btn secondary" onclick="addQuestion()">
+        + Add Question
+      </button>
+
+      <button class="btn" onclick="createQuiz()">
+        Create Quiz
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    let questionCount = 0;
+
+    function addQuestion() {
+
+      if (questionCount >= 10) {
+        alert("Maximum 10 questions allowed.");
+        return;
+      }
+
+      questionCount++;
+
+      const container =
+        document.getElementById("questionsContainer");
+
+      const questionBox =
+        document.createElement("div");
+
+      questionBox.className = "question-box";
+
+      questionBox.innerHTML = `
+
+        <h3>Question ${questionCount}</h3>
+
+        <input
+          type="text"
+          class="question-text"
+          placeholder="Write your question"
+          maxlength="200"
+        >
+
+        <input
+          type="text"
+          class="option"
+          placeholder="Option 1"
+          maxlength="100"
+        >
+
+        <input
+          type="text"
+          class="option"
+          placeholder="Option 2"
+          maxlength="100"
+        >
+
+        <input
+          type="text"
+          class="option"
+          placeholder="Option 3"
+          maxlength="100"
+        >
+
+        <input
+          type="text"
+          class="option"
+          placeholder="Option 4"
+          maxlength="100"
+        >
+
+        <select class="correct-answer">
+          <option value="0">Correct answer: Option 1</option>
+          <option value="1">Correct answer: Option 2</option>
+          <option value="2">Correct answer: Option 3</option>
+          <option value="3">Correct answer: Option 4</option>
+        </select>
+
+      `;
+
+      container.appendChild(questionBox);
+    }
+
+
+    function createQuiz() {
+
+      const creatorName =
+        document.getElementById("creatorName").value.trim();
+
+      const quizTitle =
+        document.getElementById("quizTitle").value.trim();
+
+      if (!creatorName) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      if (!quizTitle) {
+        alert("Please enter a quiz title.");
+        return;
+      }
+
+      const questionBoxes =
+        document.querySelectorAll(".question-box");
+
+      if (questionBoxes.length === 0) {
+        alert("Please add at least one question.");
+        return;
+      }
+
+      const questions = [];
+
+      for (const box of questionBoxes) {
+
+        const questionText =
+          box.querySelector(".question-text").value.trim();
+
+        const optionInputs =
+          box.querySelectorAll(".option");
+
+        const options = [];
+
+        optionInputs.forEach(input => {
+          options.push(input.value.trim());
+        });
+
+        const correctAnswer =
+          Number(
+            box.querySelector(".correct-answer").value
+          );
+
+        if (!questionText) {
+          alert("Please fill all questions.");
+          return;
+        }
+
+        if (options.some(option => !option)) {
+          alert("Please fill all four options.");
+          return;
+        }
+
+        questions.push({
+          question: questionText,
+          options: options,
+          correctAnswer: correctAnswer
+        });
+      }
+
+
+      const code =
+        Math.random()
+          .toString(36)
+          .substring(2, 10)
+          .toUpperCase();
+
+
+      const quiz = {
+
+        code: code,
+
+        creatorName: creatorName,
+
+        title: quizTitle,
+
+        questions: questions,
+
+        createdAt: new Date().toISOString()
+
+      };
+
+
+      localStorage.setItem(
+        "quiz_" + code,
+        JSON.stringify(quiz)
+      );
+
+
+      alert(
+        "Quiz created successfully!\n\nYour quiz code is: " +
+        code
+      );
+
+
+      window.location.href =
+        "quiz.html?code=" + code;
+
+    }
+
+
+    // First question automatically
+    addQuestion();
+
+  </script>
+
+</body>
+  </html>
